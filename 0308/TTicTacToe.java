@@ -57,9 +57,6 @@ public class TTicTacToe {
     }
     static void printboard(char[][] board){
         for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                board[i][j] = ' ';}}
-        for (int i = 0; i < board.length; i++) {
             System.out.println(" " + board[i][0] + " | " + board[i][1] + " | " + board[i][2]);
             if (i != 2) {
                 System.out.println("---|---|---");}}
