@@ -20,7 +20,7 @@ public class loginJoin {
             if (menuSelect == 2) {
                 Si.login();
             }
-        } while (menuSelect == 0);
+        } while (menuSelect != 0);
     }
 }
 
@@ -40,7 +40,7 @@ class SignUpInShell {
             String againpwd = sc.next();
             System.out.println("이름");
             String newname = sc.next();
-            System.out.println("사용자 타입 (고객:0, 관리자:1");
+            System.out.println("사용자 타입 (고객:0, 관리자:1)");
             int usertype = sc.nextInt();
             checkresult = checkIdPwd(newid, newpwd, againpwd);   //id, pwd 등 에러체크해주는 메소드
             if (checkresult) {   //정상적으로 회원가입 되었을 때 true
@@ -66,7 +66,7 @@ class SignUpInShell {
 
     boolean checkId(String id) {   //id 중복체크 메소드
         for (int i = 0; i < members.length; i++) {
-            if (members[i] != null && members[i].selectID() == id) {
+            if (members[i] != null && members[i].selectID().equals(id)) {
                 return true;
             }
         }
@@ -75,37 +75,41 @@ class SignUpInShell {
 
     void registId(String id, String pwd, String name, int usertype) {  //DB에 사용자 정보등록(회원가입성공)
         for (int i = 0; i < members.length; i++) {
-            if (members[i] != null && members[i].selectID() == null) {
+            if (members[i] == null) {
                 members[i] = new Account(id, pwd, name, usertype);
+                break;
             }
         }
     }
 
+
     void login() {
         Scanner sc = new Scanner(System.in);
         int trycnt = 0;
-        int state = 1; //1은 로그인 시도중, 0은 로그인 성공, -1은 계정잠김 (최초화면이동)
+        int state = 1; //1은 로그인 시도중, 0은 로그인 성공
         do {
-            ++trycnt;
             System.out.println("로그인 해주세요.");
             System.out.println("아이디");
             String interId = sc.next();
             System.out.println("비밀번호");
             String interPwd = sc.next();
             state = checkLogin(interId, interPwd);
-            if (state == 0) {
-                System.exit(state);
+            if (state == 1) {
+                trycnt++;
+                System.out.println("아이디 혹은 비밀번호가 틀렸습니다. (다시 로그인해주세요.)");
             }
             if (trycnt == 4) {
                 System.out.println("해당 계정은 잠겼습니다.");
-                state = -1;
+                return;
             }
         } while (state == 1);
     }
 
     int checkLogin(String id, String pwd) {
         for (int i = 0; i < members.length; i++) {
-            if (members[i] != null && members[i].selectID() == id && members[i].selectpwd() == pwd) {
+            if (members[i] != null && (members[i].selectID()).equals(id) && (members[i].selectpwd()).equals(pwd)) {
+                String username = members[i].selectname();
+                System.out.println(username + "님 환영합니다.");
                 return 0;
             }
         }
