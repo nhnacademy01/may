@@ -13,10 +13,11 @@ public class Food {
         return name;
     }
 
-
     public  int getPrice() {
         return price;
     }
+
+
 
     @Override
     public String toString() {

@@ -6,18 +6,18 @@ import java.util.Scanner;
 class NhnMartShell {
     public static void main(String[] args) {
         NhnMart mart = new NhnMart();
-
         //식품 매대 채우기
-       mart.prepareMart();
+        mart.prepareMart();
+
         //구매리스트 받음
         BuyList buyList = inputBuyListFromShell();
         //구매리스트 가진 고객 객체 생성
         Customer minay = new Customer(buyList);
         // 장바구니를 챙긴다.
         minay.bring(mart.provideBasket());
-        // 식품을 담는다.
+        // 고객이 주체로 식품매대에서 식품리스트을 장바구니에 담는다.
         minay.pickFoods(mart.getFoodStand());
-        // 카운터에서 계산한다.
+        // 고객이 주체로 장바구니를 카운터에 계산한다.
         minay.payTox(mart.getCounter());
     }
 
@@ -31,7 +31,7 @@ class NhnMartShell {
             String foodName = sc.next();
             int foodCount = sc.nextInt();
             buyList.add(new BuyList.Item(foodName, foodCount));
-            System.out.println("식품을 계속 구매하시겠습니까? (네:0, 아니요:1");
+            System.out.println("식품을 계속 구매하시겠습니까? (네:0, 아니요:1)");
             buyAgain = sc.nextInt();
         }
         return buyList;  //고객에게 받은 전체 구매리스트 반환
@@ -50,7 +50,7 @@ public class NhnMart {
             foodStand.add(new Food("양파", 1_000));
         }
         for (int i = 0; i < 5; i++) {
-            foodStand.add(new Food("계란(30개)", 2_000));
+            foodStand.add(new Food("계란", 2_000));
         }
         for (int i = 0; i < 10; i++) {
             foodStand.add(new Food("파", 500));
@@ -65,7 +65,7 @@ public class NhnMart {
     }
 
     public FoodStand getFoodStand() {
-         return new FoodStand();
+         return foodStand;
     }
 
     public Counter getCounter() {

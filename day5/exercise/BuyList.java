@@ -10,6 +10,10 @@ public class BuyList {
         items.add(item);
     }
 
+    public ArrayList<Item> itemList() {
+        return items;
+    }
+
     public static class Item {
         private final String name;
         private final int amount;
@@ -18,5 +22,14 @@ public class BuyList {
             this.name = name;
             this.amount = amount;
         }
+
+        public String itemName() {
+            return name;
+        }
+
+        public int itemCount() {
+            return amount;
+        }
+
     }
 }
