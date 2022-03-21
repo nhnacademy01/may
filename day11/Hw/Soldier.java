@@ -1,11 +1,11 @@
-package day11.Hw;
+package day11.PRGGAME;
 
 import java.util.Random;
 
 public class Soldier {
     private String id;
-    int level;
-    int hp;
+    int level = 1;
+    int hp = 100;
     int power = 10;
 
     public Soldier(String id) {
@@ -22,8 +22,8 @@ public class Soldier {
 
     public int attack() {
         Random random = new Random();
-        power = random.nextInt(power) + 1;
-        return power;}
+        int tmpDex = random.nextInt(power) + 1;
+        return tmpDex;}
 
     public void getDex(int dex) {
         this.hp -= dex;}

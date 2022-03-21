@@ -1,4 +1,4 @@
-package day11.Hw;
+package day11.PRGGAME;
 
 import java.util.Random;
 
@@ -17,8 +17,8 @@ public class Ork implements Runnable{
 
     public int attack() {
         Random random = new Random();
-        power = random.nextInt(power) + 1;
-        return power;}
+        int tmpDex = random.nextInt(power) + 1;
+        return tmpDex;}
 
     public void getDex(int dex) {
         this.hp -= dex;}

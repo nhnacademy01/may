@@ -1,4 +1,4 @@
-package day11.Hw;
+package day11.PRGGAME;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -46,9 +46,9 @@ public class RPGServer {
     }
 
     private void gameEnd(AttackSession session) {
-        clientOutMap.remove(session.id);
-
         sendToAll(session.id + "님 게임을 종료합니다.");
+
+        clientOutMap.remove(session.id);
         System.out.println(getTime() + " " + session.id + " is leaved: " + session.socket.getInetAddress());
         loggingCurrentClientCount();
     }
@@ -100,13 +100,14 @@ public class RPGServer {
             try {
                 while (isConnect()) {
                     String continueGame = in.readUTF();
-                    if (continueGame == "1") {
+                    if (continueGame.equals("1")) {
                         int whoisWinner = sgs.startAttack();
                             if (whoisWinner==2 || whoisWinner==3) {
-                            disconnect();}
+                                sendToAll(this.id + "님 게임을 종료합니다.");
+                            break;}
                     }   // 1은 용사승리, 2는 몬스터 승리
-                    else if (continueGame == "2") {
-                        disconnect(); }}
+                    else if (continueGame.equals("2")) {
+                        break; }}
             } catch (IOException cause) {
                 // TODO: 채팅 중 연결이 끊기는 경우
             } catch (InterruptedException e) {
@@ -140,92 +141,118 @@ public class RPGServer {
         }
 
         public int startAttack() throws InterruptedException {
-            int winner;
-            stageNum ++;
+            int winner = 1;
+            if (this.stageNum == 0) {
             sendToAll("용사(게이머) 상태\n" +
                     "아이디: " + soldier.getId() + "\n" +
                     "레벨: " + soldier.getLevel() + "\n" +
                     "체력: " + soldier.getHp() + "\n" +
-                    "공격력: " + soldier.getPower() + "\n");
-            if (this.stageNum == 1) {
+                    "공격력: " + soldier.getPower() + "\n" +
+                    "-- 계속 할려면 엔터를 입력해주세요. --");}
+            else if (this.stageNum == 1) {
                 winner = stageSlime(); }
             else if (this.stageNum == 2) {
                 winner = stageOrk(); }
             else {winner = stageDragon();}
-
+            stageNum ++;
             return winner;
         }
 
         int stageSlime() throws InterruptedException {
             int winner;
+            int sDex;  //용사 데미지
+            int mDex;  //슬라임 데미지
             sendToAll("슬라임 상태\n" +
                     "레벨: " + slime.getLevel() + "\n" +
                     "체력: " + slime.getHp() + "\n" +
                     "공격력: " + slime.getPower() + "\n");
             while (true) {
-                slime.getDex(soldier.attack());
+                sDex = soldier.attack();
+                slime.getDex(sDex);
                 if (slime.getHp()<=0) {
                     sendToAll("슬라임을 물리쳤다.\n" +
                             "-- 계속 할려면 엔터를 입력해주세요. --");
                     winner = 1;
                     return winner;}
-                else {sendToAll("slime HP : " + slime.getHp());}
+                else {sendToAll("용사가 슬라임에게 " + sDex + "데미지로 공격.\n" +
+                                "현재 슬라임 체력 : " + slime.getHp());}
                 Thread.sleep(500);
-                soldier.getDex(slime.attack());
+                mDex = slime.attack();
+                soldier.getDex(mDex);
                 if (soldier.getHp()<=0) {
                     sendToAll("슬라임 승리. 게임종료.");
                     winner = 2;
                     return winner;}
-                else {sendToAll("soldier HP : " + soldier.getHp());}
+                else {sendToAll("슬라임이 용사에게 "  + mDex + "데미지로 공격.\n" +
+                                "현재 용사 체력 : " + soldier.getHp());}
                 Thread.sleep(500);
             }
         }
 
         int stageOrk() throws InterruptedException {
             int winner;
+            int sDex;  //용사 데미지
+            int mDex;  //오크 데미지
             sendToAll("오크 상태\n" +
                     "레벨: " + ork.getLevel() + "\n" +
                     "체력: " + ork.getHp() + "\n" +
                     "공격력: " + ork.getPower() + "\n");
             while (true) {
-                ork.getDex(soldier.attack());
+                sDex = soldier.attack();
+                ork.getDex(sDex);
                 if (ork.getHp()<=0) {
-                    sendToAll("오크을 물리쳤다.\n" +
-                            "-- 계속 할려면 엔터를 입력해주세요. --");
+                    soldier.levelUp();
+                    sendToAll("오크을 물리쳤다.\n");
+                    Thread.sleep(500);
+                    sendToAll("용사 LevelUp!!!\n" +
+                              "용사 상태\n" +
+                              "레벨: " + soldier.getLevel() + "\n" +
+                              "체력: " + soldier.getHp() + "\n" +
+                              "공격력: " + soldier.getPower() + "\n" +
+                              "-- 계속 할려면 엔터를 입력해주세요. --");
                     winner = 1;
                     return winner;}
-                else {sendToAll("ork HP : " + ork.getHp());}
+                else {sendToAll("용사가 오크에게 " + sDex + "데미지로 공격.\n" +
+                                "현재 오크 체력 : " + ork.getHp());}
                 Thread.sleep(500);
-                soldier.getDex(ork.attack());
+                mDex = ork.attack();
+                soldier.getDex(mDex);
                 if (soldier.getHp()<=0) {
                     sendToAll("오크 승리. 게임종료.");
                     winner = 2;
                     return winner;}
-                else {sendToAll("soldier HP : " + soldier.getHp());}
+                else {sendToAll("오크가 용사에게 " + mDex + "데미지로 공격.\n" +
+                                "현재 용사 체력 : " + soldier.getHp());}
                 Thread.sleep(500);
             }
         }
 
          int stageDragon() throws InterruptedException {
             int winner;
+             int sDex;  //용사 데미지
+             int mDex;  //드레곤 데미지
             sendToAll("드래곤 상태\n" +
                     "레벨: " + dragon.getLevel() + "\n" +
                     "체력: " + dragon.getHp() + "\n" +
                     "공격력: " + dragon.getPower() + "\n");
              while (true) {
-                 dragon.getDex(soldier.attack());
+                 sDex = soldier.attack();
+                 dragon.getDex(sDex);
                  if (dragon.getHp()<=0) {
                      sendToAll("[외침] 용사 " + soldier.getId() + "가 드래곤을 물리쳤다!");
                      winner = 3;
                      return winner;}
-                 else {sendToAll("dragon HP : " + dragon.getHp());}
+                 else {sendToAll("용사가 드레곤에게 " + sDex + "데미지로 공격.\n" +
+                                "현재 드레곤 채력 : " + dragon.getHp());}
                  Thread.sleep(500);
-                 soldier.getDex(dragon.attack());
+                 mDex = dragon.attack();
+                 soldier.getDex(mDex);
                  if (soldier.getHp()<=0) {
                      sendToAll("드래곤 승리. 게임종료.");
                      winner = 2;
                      return winner;}
-                 else {sendToAll("soldier HP : " + soldier.getHp());}
+                 else {sendToAll("드레곤이 용사에게 " + mDex + "데지지로 공격.\n" +
+                                "현재 용사 체력 : " + soldier.getHp());}
                  Thread.sleep(500);
              }
          }

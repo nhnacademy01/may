@@ -1,4 +1,4 @@
-package day11.Hw;
+package day11.PRGGAME;
 
 import java.util.Scanner;
 
@@ -14,7 +14,7 @@ public class UserGameStory {
         String selectContinue = null;
         switch (this.stageNumber) {
             case 0: selectContinue = stageMain();
-                    break;
+                break;
             case 1: selectContinue = stageOne();
                 break;
             case 2: selectContinue = stageTwo();

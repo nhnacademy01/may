@@ -1,4 +1,4 @@
-package day11.Hw;
+package day11.PRGGAME;
 
 import java.util.Random;
 
@@ -21,12 +21,13 @@ public class Dragon implements Runnable{
 
     public int attack() {
         Random random = new Random();
+        int tmpDex = 0;
         int attackType = randomAttack();    //0이면 일반공격, 1이면 특수공격
         if (attackType == 0) {
-            power =  random.nextInt(power) + 1;}
+            tmpDex =  random.nextInt(power) + 1;}
         else if (attackType == 1) {
-            power =  15;}
-        return power;
+            tmpDex =  15;}
+        return tmpDex;
     }
 
     private int randomAttack() {

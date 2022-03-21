@@ -1,4 +1,4 @@
-package day11.Hw;
+package day11.PRGGAME;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
