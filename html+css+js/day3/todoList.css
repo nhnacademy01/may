@@ -1,0 +1,23 @@
+#listTitle {
+    text-align: left;
+    color: green;
+}
+
+#day0,
+#date0 {
+    color: blue;
+}
+#date6,
+#day6 {
+    color: red;
+}
+
+#ListTable {
+    width: 80%;
+    border: 1px solid green;
+}
+
+th, td {
+    padding: 3px;
+
+  }

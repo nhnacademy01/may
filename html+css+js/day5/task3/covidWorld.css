@@ -1,0 +1,32 @@
+th {
+    background-color: yellowgreen;
+    color: green;
+  }
+  
+  th, td {
+    border : yellowgreen 1px solid;
+    padding : 10px 5px;
+  }
+  
+#curve_chart {
+    margin : auto;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+
+  table {
+    margin-left:auto; 
+    margin-right:auto;
+    width: 500px; height:1000px;
+    border: 5px solid green;
+    border-spacing: 0;
+  }
+
+  .scrolltable {
+    display: block;
+    overflow: auto;
+  }
+
+

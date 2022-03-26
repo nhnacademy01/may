@@ -1,0 +1,18 @@
+th {
+  background-color: yellowgreen;
+  color: green;
+}
+
+th, td {
+  border : yellowgreen 1px solid;
+  padding : 10px 5px;
+}
+
+
+table, #curve_chart {
+  margin : auto;
+}
+
+h1 {
+  text-align: center;
+}
