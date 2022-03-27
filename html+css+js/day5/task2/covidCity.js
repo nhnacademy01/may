@@ -57,7 +57,7 @@ function makeTable(itemList) {
             
             let contentTd = `
             <tr>
-            <td>${itemList[i].gubun}</td>
+            <td id='gubun${i}' onClick="popup(${i})" style="cursor:pointer; font-weight: bold;"> ${itemList[i].gubun}</td>
             <td>${itemList[i].defCnt}</td>
             <td>${itemList[i].incDec}</td>
             </tr>
@@ -68,4 +68,16 @@ function makeTable(itemList) {
         resolve(itemList);
     })
 }
+
+function popup(i) {
+    var url = "popup.html";
+    var name = "popup test";
+    var option = "width = 500, height = 1000, top = 100, left = 200, location = no"
+    window.open(url, name, option);
+    document.getElementById("pInput").value = i;
+}
+
+
+
+
 
